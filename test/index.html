@@ -5,79 +5,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>学习bootstrap</title>
-    <link type="whole" href="./css/bootstrap.min.css" rel="stylesheet"><link href="./css/index.css" rel="stylesheet">
+    <link type="whole" href="./css/bootstrap.min.css" rel="stylesheet">
+    <link href="./css/index.css" rel="stylesheet">
     <link href="./css/buttons.css" rel="stylesheet">
     <link href="./css/all.css" rel="stylesheet">
     <link type="whole">
-    <script notmove src="js/jquery.min.js"></script>
+    <script type="whole" src="js/jquery.min.js"></script>
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/headroom.js"></script>
     <script type="whole" src="js/index.js"></script>
     <script src="./js/jquery.headroom.js"></script>
     <script type="whole"></script>
-    <style>
-        a{
-            background: #000;
-        }
-    </style>
+    <style type="whole"></style>
 </head>
 <body>
-<header class="navbar-fixed-top">
-    <nav class="navbar navbar-default" role="navigation">
-        <div class="btn btn-success right">
-            chenggong
-        </div>
-        <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">CodeEvery</a>
-            </div>
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                           aria-haspopup="true"
-                           aria-expanded="false">编程<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">JAVA</a></li>
-                            <li><a href="#">HTML</a></li>
-                            <li><a href="#">CSS</a></li>
-                            <li><a href="#">JS</a></li>
-                            <li><a href="#">安卓</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                           aria-haspopup="true"
-                           aria-expanded="false">生活<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">电影</a></li>
-                            <li><a href="#">小说</a></li>
-                            <li><a href="#">音乐</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="#">奇思妙想</a></li>
-                    <li><a href="#">交流专区</a></li>
-                    <li><a href="#">友情链接</a></li>
-                </ul>
-            </div>
-            <!-- /.navbar-collapse -->
-        </div>
-        <!-- /.container-fluid -->
-    </nav>
-</header>
-
-<wholein src="index.html"></wholein>
-
+<wholein src="./header/header.html"></wholein>
 <div class="container main-container">
     <div class="row">
         <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
@@ -149,18 +91,9 @@
         </div>
     </div>
 </div>
+<wholein src="./footer/footer.html"></wholein>
 </body>
 <script>
-    var head = document.getElementsByTagName("header").item(0);
-    var headroom = new Headroom(head, {
-        "tolerance": 5,
-        "offset": 200,
-        "classes": {
-            "initial": "animated",
-            "pinned": "swingInX",
-            "unpinned": "swingOutX"
-        }
-    });
-    headroom.init();
+    var rr = 0;
 </script>
 </html>

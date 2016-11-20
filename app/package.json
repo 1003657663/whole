@@ -12,6 +12,6 @@
   "author": "宋超",
   "license": "ISC",
   "devDependencies": {
-    "jschardet": "^1.4.1"
+    "cheerio": "^0.22.0"
   }
 }

@@ -2,9 +2,10 @@
  * Created by chao on 2016/11/16.
  * 解释配置文件
  */
-var read = require('./read');
+var readHtml = require('./html/readhtml');
 
 module.exports = function (config) {
+
     var allDest = config.dest;
 
     var htmlFiles = config.html.files;
@@ -27,5 +28,7 @@ module.exports = function (config) {
         console.error("html文件路径或者 htmlDest有误");
         process.exit();
     }
-    read(htmlFiles,htmlDest,cssmin,cssDest,jsmin,jsDest);
+    if (htmlFiles && htmlDest) {
+        readHtml(htmlFiles,htmlDest);
+    }
 };
