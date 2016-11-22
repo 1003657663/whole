@@ -4,31 +4,7 @@
     <bookmark url="file://$PROJECT_DIR$/app/html/handleIndexData.js" line="15" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3707697f-a008-4488-b791-a7984544dfa4" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/lib/cheerio/.npminstall.done" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/lib/cheerio/History.md" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/lib/cheerio/Readme.md" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/lib/cheerio/index.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/lib/cheerio/lib/api/attributes.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/lib/cheerio/lib/api/css.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/lib/cheerio/lib/api/forms.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/lib/cheerio/lib/api/manipulation.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/lib/cheerio/lib/api/traversing.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/lib/cheerio/lib/cheerio.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/lib/cheerio/lib/parse.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/lib/cheerio/lib/static.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/lib/cheerio/lib/utils.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/lib/cheerio/package.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/html/handleChildHtml.js" afterPath="$PROJECT_DIR$/app/html/handleChildHtml.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/html/handleIndexData.js" afterPath="$PROJECT_DIR$/app/html/handleIndexData.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/package.json" afterPath="$PROJECT_DIR$/app/package.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/document.md" afterPath="$PROJECT_DIR$/document.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/header/header.html" afterPath="$PROJECT_DIR$/test/header/header.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/index.html" afterPath="$PROJECT_DIR$/test/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/wholefile.js" afterPath="$PROJECT_DIR$/test/wholefile.js" />
-    </list>
+    <list default="true" id="3707697f-a008-4488-b791-a7984544dfa4" name="Default" comment="" />
     <ignored path="modularHTML.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -740,12 +716,12 @@
       <workItem from="1479397808977" duration="55000" />
       <workItem from="1479524961368" duration="57176000" />
       <workItem from="1479734947354" duration="8684000" />
-      <workItem from="1479817537434" duration="11555000" />
+      <workItem from="1479817537434" duration="11677000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="89255000" />
+    <option name="totallyTimeSpent" value="89377000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1378" height="744" extended-state="0" />
@@ -759,7 +735,7 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.6661211" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.6661211" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26251897" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
