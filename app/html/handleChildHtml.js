@@ -192,7 +192,7 @@ module.exports = function (wholein, file, indexData) {
 
         console.log($dom("body").html());
 
-        if (!hasBody) {//如果没有body元素，但是又notmove元素，那么错误
+        if (!hasBody) {//如果没有body元素，但是有notmove元素，那么错误
             let isOk = false;
             for(let i in defaultEl){
                 if(defaultEl[i].notmove && defaultEl[i].notmove.length >0){
