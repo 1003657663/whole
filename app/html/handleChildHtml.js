@@ -6,8 +6,9 @@ let path = require('path');
 let fs = require('fs');
 let myPath = require('../mypath');
 let $ = require('cheerio');
+let insertDataToIndex = require('./insertDataToIndex');
 
-module.exports = function (wholein, file, indexData) {
+module.exports = function (wholein, file, indexData ,isIndex) {
     //<wholein src="../index.js" ></wholein>
 
     let defaultEl = {"script": {}, "link": {}, "style": {}};//默认会被移动到主页面的数组
@@ -190,8 +191,6 @@ module.exports = function (wholein, file, indexData) {
         });
 
 
-        console.log($dom("body").html());
-
         if (!hasBody) {//如果没有body元素，但是又notmove元素，那么错误
             let isOk = false;
             for(let i in defaultEl){
@@ -201,6 +200,8 @@ module.exports = function (wholein, file, indexData) {
                 }
             }
         }
+
+        insertDataToIndex(defaultEl);
     } else {
         //路径超出项目范围错误提示
         console.error(src + " 文件中的wholein的src:" + src + " 地址经过计算已经在wholefile.js所在的根目录之外，防止误修改根目录之外的文件,请修改");

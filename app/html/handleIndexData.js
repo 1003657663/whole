@@ -6,54 +6,67 @@
 let $ = require('cheerio');
 let handChildHtml = require('./handleChildHtml');
 
-module.exports = function (data, file, htmlDest) {
+module.exports = function (data, file, htmlDest, isIndex) {
     //data是来自主html文件的data
-    let $dom = $.load(data,{decodeEntities:false});
-    let wholeScript = $dom('script[type=whole]');
-    let wholeLink = $dom('link[type=whole]');
-    let locationStyle = $dom('style[type=whole]');
-    let wholeins = $dom('wholein');
+    let $dom = $.load(data, {decodeEntities: false});
 
-    let locationScript = wholeScript.filter(':not([src])');
-    let locationLink = wholeLink.filter(':not([href])');
+    let defaultEl = {
+        script: {pathTag: "src"},
+        link: {pathTag: "href"},
+        style: {},
+    };
 
-
-    if (wholeins.filter(':not([src])').length > 0) {
-        console.error("主页面:" + file + "中包含的wholein标签必须含有src属性，请删除不含src属性的wholein标签");
-        process.exit();
-    }
-    if (locationScript.length > 1) {
-        console.error("主页面:" + file + "中包含多个定位script标签，规定只能有一个");
-        process.exit();
-    }
-    if (locationLink.length > 1) {
-        console.error("主页面:" + file + "中包含多个定位link标签，规定只能有一个");
-        process.exit();
-    }
-    if (locationStyle.length > 1) {
-        console.error("主页面:" + file + "中包含多个定位style标签，规定只能有一个");
-        process.exit();
-    }
-
-
-    let srcScript = wholeScript.filter('script[src]');
-    let srcLink = wholeLink.filter('link[href]');
+    let wholeins;
+    $dom("*").filter(function (i, el) {
+        var $this = $(this);
+        if ($this.is("wholein")) {
+            if ($this.is(":not([src])")) {
+                console.error("主页面:" + file + "中包含的wholein标签必须含有src属性，请删除不含src属性的wholein标签");
+                process.exit();
+            }
+            if (wholeins) {
+                wholeins.add($this);//有错误
+            } else {
+                wholeins = $this;
+            }
+            console.log($this.toString());
+        } else {
+            for (let i in defaultEl) {
+                let element = defaultEl[i];
+                if ($this.is(i)) {
+                    if ($this.is("[type=whole]")) {
+                        if (element.pathTag) {//如果有资源tag
+                            if ($this.is("[" + element.pathTag + "]")) {
+                                if (element.srcWhole) {
+                                    element.srcWhole.add($this);
+                                } else {
+                                    element.srcWhole = $this;
+                                }
+                            } else {
+                                if (element.locationWhole) {
+                                    console.error("主页面:" + file + "中包含多个定位" + i + "标签，规定只能有一个");
+                                    process.exit();
+                                } else {
+                                    element.locationWhole = $this;
+                                }
+                            }
+                        } else {
+                            if (element.whole) {
+                                element.whole.add($this);
+                            } else {
+                                element.whole = $this;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    });
+    console.log(wholeins.toString());
+    return;
 
     let length = wholeins.length;
     for (let i = 0; i < length; i++) {
-        handChildHtml(wholeins.eq(i), file,
-            {
-                script: {
-                    locationScript: locationScript,
-                    srcScript: srcScript
-                },
-                link: {
-                    locationLink: locationLink,
-                    srcLink: srcLink
-                },
-                style: {
-                    locationStyle: locationStyle
-                }
-            })
+        handChildHtml(wholeins.eq(i), file, defaultEl, isIndex);
     }
 };

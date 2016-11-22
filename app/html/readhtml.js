@@ -3,7 +3,7 @@
  * 负责读取html文件，并把文件流转到下一步
  */
 var fs = require('fs');
-var handleData = require('./handleIndexData');
+var handleIndexData = require('./handleIndexData');
 var path = require('path');
 var mypath = require('../myPath');
 
@@ -31,7 +31,7 @@ module.exports = function (htmlFiles, htmlDest) {
                 console.log(err);
                 return;
             }
-            handleData(data.toString(), file, htmlDest);
+            handleIndexData(data.toString(), file, htmlDest, true);
         })
     }
 };
