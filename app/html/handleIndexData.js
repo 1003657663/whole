@@ -26,10 +26,10 @@ module.exports = function (data, file, htmlDest, isIndex) {
             }
             if (wholeins) {
                 wholeins.add($this);//有错误
+                //$this.add(wholeins);//有错误
             } else {
                 wholeins = $this;
             }
-            console.log($this.toString());
         } else {
             for (let i in defaultEl) {
                 let element = defaultEl[i];
@@ -37,17 +37,17 @@ module.exports = function (data, file, htmlDest, isIndex) {
                     if ($this.is("[type=whole]")) {
                         if (element.pathTag) {//如果有资源tag
                             if ($this.is("[" + element.pathTag + "]")) {
-                                if (element.srcWhole) {
-                                    element.srcWhole.add($this);
+                                if (element.src) {
+                                    element.src.add($this);
                                 } else {
-                                    element.srcWhole = $this;
+                                    element.src = $this;
                                 }
                             } else {
-                                if (element.locationWhole) {
+                                if (element.location) {
                                     console.error("主页面:" + file + "中包含多个定位" + i + "标签，规定只能有一个");
                                     process.exit();
                                 } else {
-                                    element.locationWhole = $this;
+                                    element.location = $this;
                                 }
                             }
                         } else {
@@ -57,6 +57,12 @@ module.exports = function (data, file, htmlDest, isIndex) {
                                 element.whole = $this;
                             }
                         }
+                    } else {
+                        if (element.other) {
+                            element.other.add($this);
+                        } else {
+                            element.other = $this;
+                        }
                     }
                 }
             }
@@ -64,7 +70,6 @@ module.exports = function (data, file, htmlDest, isIndex) {
     });
     console.log(wholeins.toString());
     return;
-
     let length = wholeins.length;
     for (let i = 0; i < length; i++) {
         handChildHtml(wholeins.eq(i), file, defaultEl, isIndex);

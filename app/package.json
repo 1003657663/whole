@@ -11,7 +11,6 @@
   ],
   "author": "宋超",
   "license": "ISC",
-  "devDependencies": {
-    "cheerio": "^0.22.0"
-  }
+  "devDependencies": {},
+  "dependencies": {}
 }

@@ -8,7 +8,7 @@ let myPath = require('../mypath');
 let $ = require('cheerio');
 let insertDataToIndex = require('./insertDataToIndex');
 
-module.exports = function (wholein, file, indexData ,isIndex) {
+module.exports = function (wholein, file, indexData, isIndex) {
     //<wholein src="../index.js" ></wholein>
 
     let defaultEl = {"script": {}, "link": {}, "style": {}};//默认会被移动到主页面的数组
@@ -30,9 +30,9 @@ module.exports = function (wholein, file, indexData ,isIndex) {
         let head = $dom("head");
 
         //处理子页面数据
-/*        let script = {};
-        let link = {};
-        let style = {};*/
+        /*        let script = {};
+         let link = {};
+         let style = {};*/
         let hasBody = false;
         let wholeins;
 
@@ -45,13 +45,13 @@ module.exports = function (wholein, file, indexData ,isIndex) {
                 }
             } else if ($this.is("body")) {
                 hasBody = true;
-            } else if($this.is("wholein")){
-                if(wholeins){
+            } else if ($this.is("wholein")) {
+                if (wholeins) {
                     wholeins.add($this);
-                }else{
+                } else {
                     wholeins = $this;
                 }
-            }else {
+            } else {
                 let isAimElement = false;
                 for (let i in defaultEl) {
                     if ($this.is(i)) {
@@ -190,11 +190,9 @@ module.exports = function (wholein, file, indexData ,isIndex) {
             }
         });
 
-
         if (!hasBody) {//如果没有body元素，但是又notmove元素，那么错误
-            let isOk = false;
-            for(let i in defaultEl){
-                if(defaultEl[i].notmove && defaultEl[i].notmove.length >0){
+            for (let i in defaultEl) {
+                if (defaultEl[i].notmove && defaultEl[i].notmove.length > 0) {
                     console.error(src + "  无body元素的文件中的notmove标签是无效的，请把html代码用body元素包裹");
                     process.exit();
                 }

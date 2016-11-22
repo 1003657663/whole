@@ -4,6 +4,7 @@
 var whole = require('../app/whole.js');
 whole.task({
     dest:"./dist",
+    usertag:"",
     html:{
         files:["index.html"],
         dest:"./dist"
