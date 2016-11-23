@@ -11,7 +11,11 @@ let insertDataToIndex = require('./insertDataToIndex');
 module.exports = function (wholein, file, indexData, isIndex) {
     //<wholein src="../index.js" ></wholein>
 
-    let defaultEl = {"script": {}, "link": {}, "style": {}};//默认会被移动到主页面的数组
+    let defaultEl = {
+        script: {srcTag: "src"},
+        link: {srcTag: "href"},
+        style: {}
+    };//默认会被移动到主页面的数组
 
     let separator = path.sep;//取得操作系统的目录路径 分隔符
     let src = wholein.attr('src');//取得被包含的文件的路径
@@ -27,14 +31,11 @@ module.exports = function (wholein, file, indexData, isIndex) {
             process.exit();
         }
         let $dom = $.load(data, {decodeEntities: false});
-        let head = $dom("head");
 
         //处理子页面数据
-        /*        let script = {};
-         let link = {};
-         let style = {};*/
         let hasBody = false;
         let wholeins;
+
 
         $dom("*").filter(function (i, el) {
             var $this = $(this);
@@ -58,11 +59,13 @@ module.exports = function (wholein, file, indexData, isIndex) {
                         isAimElement = true;
                         if ($this.is("[movetop]")) {
                             $this.removeAttr("movetop");
+                            handlePathELement($this, file, defaultEl[i].srcTag);
                             if (defaultEl[i].movetop) {
                                 defaultEl[i].movetop.add($this);
                             } else {
                                 defaultEl[i].movetop = $this;
                             }
+                            console.log($this.path);
                         } else if ($this.is("[movebottom]")) {
                             $this.removeAttr("movebottom");
                             if (defaultEl[i].movebottom) {
@@ -87,100 +90,6 @@ module.exports = function (wholein, file, indexData, isIndex) {
                         }
                     }
                 }
-                /*                if ($this.is("script")) {
-                 isAimElement = true;
-                 if ($this.is("[movetop]")) {
-                 $this.removeAttr("movetop");
-                 if (script.movetop) {
-                 script.movetop.add($this);
-                 } else {
-                 script.movetop = $this;
-                 }
-                 } else if ($this.is("[movebottom]")) {
-                 $this.removeAttr("movebottom");
-                 if (script.movebottom) {
-                 script.movebottom.add($this);
-                 } else {
-                 script.movebottom = $this;
-                 }
-                 } else if ($this.is("[notmove]")) {
-                 $this.removeAttr("notmove");
-                 isAimElement = false;
-                 if (script.notmove) {
-                 script.notmove.add($this);
-                 } else {
-                 script.notmove = $this;
-                 }
-                 } else {
-                 if (script.other) {
-                 script.other.add($this);
-                 } else {
-                 script.other = $this;
-                 }
-                 }
-                 } else if ($this.is("link")) {
-                 isAimElement = true;
-                 if ($this.is("[movetop]")) {
-                 $this.removeAttr("movetop");
-                 if (link.movetop) {
-                 link.movetop.add($this);
-                 } else {
-                 link.movetop = $this;
-                 }
-                 } else if ($this.is("[movebottom]")) {
-                 $this.removeAttr("movebottom");
-                 if (link.movebottom) {
-                 link.movebottom.add($this);
-                 } else {
-                 link.movebottom = $this;
-                 }
-                 } else if ($this.is("[notmove]")) {
-                 $this.removeAttr("notmove");
-                 isAimElement = false;
-                 if (link.notmove) {
-                 link.notmove.add($this);
-                 } else {
-                 link.notmove = $this;
-                 }
-                 } else {
-                 if (link.other) {
-                 link.other.add($this);
-                 } else {
-                 link.other = $this;
-                 }
-                 }
-                 } else if ($this.is("style")) {
-                 isAimElement = true;
-                 if ($this.is("[movetop]")) {
-                 $this.removeAttr("movetop");
-                 if (style.movetop) {
-                 style.movetop.add($this);
-                 } else {
-                 style.movetop = $this;
-                 }
-                 } else if ($this.is("[movebottom]")) {
-                 $this.removeAttr("movebottom");
-                 if (style.movebottom) {
-                 style.movebottom.add($this);
-                 } else {
-                 style.movebottom = $this;
-                 }
-                 } else if ($this.is("[notmove]")) {
-                 $this.removeAttr("notmove");
-                 isAimElement = false;
-                 if (style.notmove) {
-                 style.notmove.add($this);
-                 } else {
-                 style.notmove = $this;
-                 }
-                 } else {
-                 if (style.other) {
-                 style.other.add($this);
-                 } else {
-                 style.other = $this;
-                 }
-                 }
-                 }*/
 
                 if (isAimElement) {
                     if ($this.is(":not([notmove])")) {
@@ -198,7 +107,10 @@ module.exports = function (wholein, file, indexData, isIndex) {
                 }
             }
         }
-
+        if (wholeins) {
+            console.log(wholeins.toString());
+        }
+        return;
         insertDataToIndex(defaultEl);
     } else {
         //路径超出项目范围错误提示
@@ -206,5 +118,26 @@ module.exports = function (wholein, file, indexData, isIndex) {
         process.exit();
     }
 
+};
+/**
+ * 处理标签中的连接src和href属性
+ * @param element
+ */
+function handlePathELement(element, file, srcTag) {
+    //可能没有src标签比如<script>和<style>
+    if (srcTag) {
+        if (element.attr(srcTag)) {
+            element.path = getAbsolutePath(file, element.attr(srcTag));
+        }
+    }
 }
-;
+/**
+ * 通过当前路径filt和相对路径src获得解析后的绝对路径
+ * @param file
+ * @param src
+ * @returns {string|*}
+ */
+function getAbsolutePath(file, src) {
+    var dir = path.dirname(file);
+    return path.join(file, src);
+}

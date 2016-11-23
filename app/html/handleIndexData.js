@@ -68,8 +68,6 @@ module.exports = function (data, file, htmlDest, isIndex) {
             }
         }
     });
-    console.log(wholeins.toString());
-    return;
     let length = wholeins.length;
     for (let i = 0; i < length; i++) {
         handChildHtml(wholeins.eq(i), file, defaultEl, isIndex);

@@ -9,8 +9,6 @@ var mypath = require('../myPath');
 
 module.exports = function (htmlFiles, htmlDest) {
 
-    global.tt = 200;
-
     if (Array.isArray(htmlFiles)) {
         var length = htmlFiles.length;
         for (var i = 0; i < length; i++) {
