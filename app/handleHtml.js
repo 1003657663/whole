@@ -9,18 +9,6 @@ let $ = require('cheerio'),
     myPath = require('./myPath');
 
 /**
- * 通过当前路径filt和相对路径src获得解析后的绝对路径
- * @param file
- * @param src
- * @returns {string|*}
- */
-function getAbsolutePath(file, src) {
-    console.log(file);
-    let dir = path.dirname(file);
-    return path.join(dir, src);
-}
-
-/**
  * 处理标签中的连接src和href属性
  * @param element
  */
@@ -28,11 +16,17 @@ function handlePathELement(element, file, srcTag) {
     //可能没有src标签比如<script>和<style>
     if (srcTag) {
         if (element.attr(srcTag)) {
-            element.path = getAbsolutePath(file, element.attr(srcTag));
+            element.path = myPath.getAbsolutePath(file, element.attr(srcTag));
         }
     }
 }
 
+/**
+ * 解析html中的script，link，style标签和其他自定义标签
+ * @param $dom
+ * @param filePath
+ * @returns {{body: *, wholein: *, allTag: {body: null, script: {pathTag: string}, link: {pathTag: string}, style: {}}}}
+ */
 function resolveHtml($dom, filePath) {
 
     let body,
@@ -94,7 +88,6 @@ function resolveHtml($dom, filePath) {
                                 } else {
                                     element.movetop = $this;
                                 }
-                                console.log($this.path);
                             } else if ($this.is("[movebottom]")) {
                                 $this.removeAttr("movebottom");
                                 if (element.movebottom) {
@@ -145,23 +138,27 @@ function resolveHtml($dom, filePath) {
         allTag: defaultEl
     };
 }
-function handleResult($, result) {
+/**
+ * 处理返回的数据，增删改相应的dom结构,时刻牢记任何一个标签都可能为空，需要判空
+ * @param $dom
+ * @param result
+ */
+function handleResult($dom, result) {
     let body = result.body;
-
     let allTag = result.allTag;
 
 }
 
-
-function fileExist(file) {
-
-}
-
-
+/**
+ * module,入口
+ * @param filePath
+ * @returns {{data: string, allTag: {script: {notmove: {thedata: string, path: string}, movetop: string, movebottom: string, other: string, srcTag: string}, link: {srcTag: string}, style: {}, user: {}}}}
+ */
 module.exports = function handleHtml(filePath) {
+    console.log("正在解析：" + filePath);
     //参数是文件路径，必须是单个文件
-    if (myPath.isAfter(process.cwd(), filePath)) {//判断路径是否超界，合法性
-        console.error(filePath + "  文件的路径在执行更目录之外，不合法，请引用项目目录下的文件");
+    if (myPath.isOver(filePath)) {//判断路径是否超界，合法性
+        console.error(filePath + "  文件的路径在执行目录之外，不合法，请引用项目目录下的文件");
         process.exit();
     }
     //判断文件存在性,直接读取文件，出错则结束说明文件有问题
@@ -187,7 +184,7 @@ module.exports = function handleHtml(filePath) {
     //**************************************************接下来处理返回的数据，并返回
     if (wholein) {
         for (let i = 0; i < wholein.length; i++) {
-            let result = handleHtml(wholein.eq(i).attr("src"));
+            let result = handleHtml(myPath.getAbsolutePath(filePath, wholein.eq(i).attr("src")));
             handleResult($dom, result);//先处理返回结果，处理后，在解析当前页面
         }
     }
