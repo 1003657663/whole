@@ -1,9 +1,10 @@
+'use strict';
 /**
  * Created by w1003 on 2016/11/19.
  */
 
-var path = require('path');
-
+let path = require('path'),
+    cwdPath;
 module.exports = {
     isBefore: function (pathA, pathB) {
         if (path.relative(pathA, pathB).indexOf('..\\') == -1) {
@@ -18,5 +19,11 @@ module.exports = {
         } else {
             return true;
         }
+    },
+    isOver: function (filePath) {
+        if (!cwdPath) {
+            cwdPath = process.cwd();
+        }
+        return this.isAfter(cwdPath, filePath);//判断路径合法性
     }
-}
+};

@@ -1,0 +1,27 @@
+{
+  "bitwise":true,//禁止位运算符
+  "curly":true,//循环语句必须使用花括号
+  "esversion":6,//使用ES6
+  "forin":true,//forin循环检查
+  "funcscope":true,//禁止外部访问内部声明的变量
+  "latedef":true,//禁止定义之前使用的变量
+  "noarg":true,//禁止arguments.callee,caller
+  "nonbsp":true,//不换行的空格
+  "notypeof":true,//无效的typeof操作符
+  "predef":true,//扩展的隐式全局变量
+  "strict":"global",//全局严格模式
+  "undef":true,//变量未定义错误
+  "unused":true,//变量定义未使用
+  "varstmt":true,//禁止使用var声明变量
+  "evil":true,//禁止使用eval
+  "lastsemic":true,//检查一行代码后面的分号是否遗漏
+  "loopfunc":true,//禁止内部循环，i的引用错误
+  "withstmt":true,//检查with的使用
+  "browser":true,//暴露浏览器属性的全局变量
+  "devel":true,//暴露调试变量包括console
+  "globals":{//全局变量
+    "require":true,
+    "module":true,
+    "process":true
+  }
+}

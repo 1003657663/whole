@@ -1,20 +1,21 @@
+'use strict';
 /**
  * Created by chao on 2016/11/16.
  * 解释配置文件
  */
-var readHtml = require('./html/readhtml');
+let readHtml = require('./readhtml');
 
 module.exports = function (config) {
 
-    var allDest = config.dest;
+    let allDest = config.dest;
 
-    var htmlFiles = config.html.files;
-    var cssmin = config.css.cssmin;
-    var jsmin = config.js.jsmin;
+    let htmlFiles = config.html.files;
+    let cssmin = config.css.cssmin;
+    let jsmin = config.js.jsmin;
 
-    var htmlDest = config.html.dest || allDest;
-    var cssDest = config.css.dest || allDest;
-    var jsDest = config.js.dest || allDest;
+    let htmlDest = config.html.dest || allDest;
+    let cssDest = config.css.dest || allDest;
+    let jsDest = config.js.dest || allDest;
 
     if((htmlFiles && !htmlDest)){
         console.error("html文件路径或者 htmlDest有误");
