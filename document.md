@@ -113,19 +113,9 @@ whole
     <link type="whole">
     <link type="whole" href="./css/index.css>
     ```
-    如果style，link，script标签都没有type="whole"的位置标记标签，那么默认位置是head标签最底部，
-    顺序是link，style，script依次排列,就像这样
-    ```
-    <head>
-        <link rel="stylesheet" href="index.css">
-        <style>
-            a:hover{
-                coloe:#ffffff;
-            }
-        </style>
-        <script src="index.js"></script>
-    </head>
-    ```
+    如果style，link，script标签都没有type="whole"的位置标记标签，那么默认script位置是body之后，其它标签位置是head标签最底部，
+    顺序是按照原来页面中的顺序排列
+    
 ### 子html页面
 
 * 子html页面  

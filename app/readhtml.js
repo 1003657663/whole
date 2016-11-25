@@ -13,21 +13,23 @@ module.exports = function (htmlFiles, htmlDest) {
         let cwdPath = process.cwd();
         for (let i = 0; i < length; i++) {
             let filePath = mypath.getAbsolutePath(cwdPath, htmlFiles[i]);
-            
+
             if (mypath.isOver(filePath)) {
                 console.error(htmlFiles + " 地址经过计算已经在wholefile.js所在的根目录之外，防止误修改根目录之外的文件,请修改");
                 process.exit();
             }
-            handleHtml(filePath);
+            let global = {};
+            handleHtml(filePath, global);
         }
     } else {
         let cwdPath = process.cwd();
-        htmlFiles = mypath.getAbsolutePath(cwdPath,htmlFiles);
+        htmlFiles = mypath.getAbsolutePath(cwdPath, htmlFiles);
 
         if (mypath.isOver(htmlFiles)) {
             console.error(htmlFiles + " 地址经过计算已经在wholefile.js所在的根目录之外，防止误修改根目录之外的文件,请修改");
             process.exit();
         }
-        handleHtml(htmlFiles);
+        let global = {};
+        handleHtml(htmlFiles, global);
     }
 };
