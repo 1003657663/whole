@@ -4,7 +4,8 @@
  */
 
 let path = require('path'),
-    cwdPath;
+    fs = require('fs'),
+    _startPath;
 module.exports = {
     //是否pathA<pathB
     isBefore: function (pathA, pathB) {
@@ -25,10 +26,11 @@ module.exports = {
     },
     //判断路径是否超界
     isOver: function (filePath) {
-        if (!cwdPath) {
-            cwdPath = process.cwd();
+        if (!_startPath) {
+            _startPath = process.argv[1];
         }
-        return this.isAfter(cwdPath, filePath);//判断路径合法性
+        let dir = path.dirname(_startPath);
+        return this.isAfter(dir, filePath);//判断路径合法性
     },
     /**
      * 通过当前路径filt和相对路径src获得解析后的绝对路径
@@ -52,6 +54,26 @@ module.exports = {
         } else {
             file = path.dirname(file);
             return path.join(file, src);
+        }
+    },
+    startPath: function () {
+        if (!_startPath) {
+            _startPath = process.argv[1];
+        }
+        return path.dirname(_startPath);
+    },
+    destPath: function (destPath, fileName) {
+        let _dPath = path.join(this.startPath(), destPath);
+        let stat = fs.statSync(_dPath);
+        if (!stat || !stat.isDirectory()) {
+            try {
+                fs.mkdirSync(_dPath);
+                return path.join(_dPath, './' + fileName);
+            } catch (e) {
+                console.error(e);
+            }
+        } else if (stat && stat.isDirectory()) {
+            return path.join(_dPath, './' + fileName);
         }
     }
 };

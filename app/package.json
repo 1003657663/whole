@@ -4,7 +4,7 @@
   "description": "自动合并分开的html文件，包括其中的style和js标签，是一个html模块化工具",
   "main": "wholefile.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node ../test/wholefile.js"
   },
   "keywords": [
     "whole"

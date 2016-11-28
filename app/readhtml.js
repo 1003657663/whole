@@ -5,12 +5,15 @@
  * 负责读取html文件，并把文件流转到下一步
  */
 let handleHtml = require('./handleHtml'),
-    mypath = require('./myPath');
+    mypath = require('./myPath'),
+    path = require('path'),
+    fs = require('fs');
 
 module.exports = function (htmlFiles, htmlDest) {
+
     if (Array.isArray(htmlFiles)) {
         let length = htmlFiles.length;
-        let cwdPath = process.cwd();
+        let cwdPath = mypath.startPath();
         for (let i = 0; i < length; i++) {
             let filePath = mypath.getAbsolutePath(cwdPath, htmlFiles[i]);
 
@@ -19,10 +22,17 @@ module.exports = function (htmlFiles, htmlDest) {
                 process.exit();
             }
             let global = {};
-            handleHtml(filePath, global);
+            let handleResult = handleHtml(filePath, global);
+            if (handleResult.$dom) {
+                fs.writeFile(mypath.destPath(htmlDest, path.basename(filePath)), handleResult.$dom.html(), function (err) {
+                    if (err) {
+                        console.error(err);
+                    }
+                });
+            }
         }
     } else {
-        let cwdPath = process.cwd();
+        let cwdPath = mypath.startPath();
         htmlFiles = mypath.getAbsolutePath(cwdPath, htmlFiles);
 
         if (mypath.isOver(htmlFiles)) {
@@ -30,6 +40,11 @@ module.exports = function (htmlFiles, htmlDest) {
             process.exit();
         }
         let global = {};
-        handleHtml(htmlFiles, global);
+        let handleResult = handleHtml(htmlFiles, global);
+        if (handleResult.$dom) {
+            fs.writeFile(mypath.destPath(htmlDest, path.basename(htmlFiles)), handleResult.$dom.html(), function (err) {
+                console.error(err);
+            });
+        }
     }
 };

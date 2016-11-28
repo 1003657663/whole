@@ -169,7 +169,11 @@ function handleResult(resolveResult, result, thisWholein) {
         }
     }
     //body未过滤，这里需要过滤
-    thisWholein.replaceWith(thatDom("*"));
+    if(thatBody) {
+        thisWholein.replaceWith(thatBody.children());
+    }else{
+        thisWholein.replaceWith(thatDom("*"));
+    }
 }
 
 /**
@@ -178,7 +182,6 @@ function handleResult(resolveResult, result, thisWholein) {
  * @returns {{data: string, allTag: {script: {notmove: {thedata: string, path: string}, movetop: string, movebottom: string, other: string, srcTag: string}, link: {srcTag: string}, style: {}, user: {}}}}
  */
 module.exports = function handleHtml(filePath, global) {
-    console.log("正在解析：" + filePath);
     //参数是文件路径，必须是单个文件
     if (myPath.isOver(filePath)) {//判断路径是否超界，合法性
         console.error(filePath + "  文件的路径在执行目录之外，不合法，请引用项目目录下的文件");
@@ -203,14 +206,12 @@ module.exports = function handleHtml(filePath, global) {
         process.exit();
     }
 
-
     //**************************************************接下来处理返回的数据，并返回
     if (wholein) {
         for (let i = 0; i < wholein.length; i++) {
             let path = myPath.getAbsolutePath(filePath, wholein.eq(i).attr("src"));
             let result = handleHtml(path);
             handleResult(resolveData, result, wholein.eq(i));//先处理返回结果，处理后，在解析当前页面
-            console.log(path + "\n\n" + $dom.html());
         }
     }
 
