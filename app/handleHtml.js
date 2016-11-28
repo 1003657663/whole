@@ -27,7 +27,7 @@ function handlePathELement(element, file, srcTag) {
  * @param filePath
  * @returns {{body: *, wholein: *, allTag: {body: null, script: {pathTag: string}, link: {pathTag: string}, style: {}}}}
  */
-function resolveHtml($dom, filePath) {
+function resolveHtml($dom, filePath, isFirst) {
 
     let body,
         wholein,
@@ -65,6 +65,7 @@ function resolveHtml($dom, filePath) {
                     if ($this.is(i)) {
                         let element = defaultEl[i];
                         if ($this.is("[type=whole]")) {//如果type是whole那么是index专用标签，单独解析
+                            $this.removeAttr("type");
                             if (element.pathTag) {//如果有资源tag
                                 if ($this.is("[" + element.pathTag + "]")) {
                                     if (element.src) {
@@ -90,7 +91,9 @@ function resolveHtml($dom, filePath) {
                                 }
                             } else {
                                 handlePathELement($this, filePath, element.srcTag);
-                                $this.remove();
+                                if (!isFirst) {
+                                    $this.remove();
+                                }
                                 if (element.other) {
                                     element.other.add($this);
                                 } else {
@@ -169,9 +172,9 @@ function handleResult(resolveResult, result, thisWholein) {
         }
     }
     //body未过滤，这里需要过滤
-    if(thatBody) {
+    if (thatBody) {
         thisWholein.replaceWith(thatBody.children());
-    }else{
+    } else {
         thisWholein.replaceWith(thatDom("*"));
     }
 }
@@ -181,7 +184,8 @@ function handleResult(resolveResult, result, thisWholein) {
  * @param filePath
  * @returns {{data: string, allTag: {script: {notmove: {thedata: string, path: string}, movetop: string, movebottom: string, other: string, srcTag: string}, link: {srcTag: string}, style: {}, user: {}}}}
  */
-module.exports = function handleHtml(filePath, global) {
+module.exports = function handleHtml(filePath, isFirst) {
+    console.log("正在解析：" + filePath);
     //参数是文件路径，必须是单个文件
     if (myPath.isOver(filePath)) {//判断路径是否超界，合法性
         console.error(filePath + "  文件的路径在执行目录之外，不合法，请引用项目目录下的文件");
@@ -198,7 +202,7 @@ module.exports = function handleHtml(filePath, global) {
 
     //读取文件的wholein属性，并且递归给下一个
     let $dom = $.load(fileData, {decodeEntities: false});
-    let resolveData = resolveHtml($dom, filePath);
+    let resolveData = resolveHtml($dom, filePath, isFirst);
     let wholein = resolveData.wholein;
 
     if (wholein && wholein.filter(":not([src])").length > 0) {

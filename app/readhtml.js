@@ -27,6 +27,8 @@ module.exports = function (htmlFiles, htmlDest) {
                 fs.writeFile(mypath.destPath(htmlDest, path.basename(filePath)), handleResult.$dom.html(), function (err) {
                     if (err) {
                         console.error(err);
+                    } else {
+                        console.log("写入成功 done");
                     }
                 });
             }
@@ -43,7 +45,11 @@ module.exports = function (htmlFiles, htmlDest) {
         let handleResult = handleHtml(htmlFiles, global);
         if (handleResult.$dom) {
             fs.writeFile(mypath.destPath(htmlDest, path.basename(htmlFiles)), handleResult.$dom.html(), function (err) {
-                console.error(err);
+                if (err) {
+                    console.error(err);
+                } else {
+                    console.log("写入成功 done");
+                }
             });
         }
     }
