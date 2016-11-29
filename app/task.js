@@ -12,7 +12,7 @@ module.exports = function (config) {
 
     let htmlFiles = config.html.files;
 
-    let htmlDest = config.html.dest || allDest;
+    let htmlDest = path.join(allDest, config.html.dest);
 
     let tag = config.tag;
 

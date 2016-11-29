@@ -11,46 +11,38 @@ let handleHtml = require('./handleHtml'),
 
 module.exports = function (htmlFiles, htmlDest, defaultTag) {
 
-    if (Array.isArray(htmlFiles)) {
-        let length = htmlFiles.length;
+    function startHandleHtml(oneHtmlFile) {
         let cwdPath = mypath.startPath();
-        for (let i = 0; i < length; i++) {
-            let filePath = mypath.getAbsolutePath(cwdPath, htmlFiles[i]);
+        let readHtmlPath = mypath.getAbsolutePath(cwdPath, oneHtmlFile);
 
-            if (mypath.isOver(filePath)) {
-                console.error(htmlFiles + " 地址经过计算已经在wholefile.js所在的根目录之外，防止误修改根目录之外的文件,请修改");
-                process.exit();
-            }
-            let global = {};
-            let handleResult = handleHtml(filePath, defaultTag, true);
-            if (handleResult.$dom) {
-                fs.writeFile(mypath.destPath(htmlDest, path.basename(filePath)), handleResult.$dom.html(), function (err) {
-                    if (err) {
-                        console.error(err);
-                    } else {
-                        console.log("写入成功 done");
-                    }
-                });
-            }
-        }
-    } else {
-        let cwdPath = mypath.startPath();
-        htmlFiles = mypath.getAbsolutePath(cwdPath, htmlFiles);
-
-        if (mypath.isOver(htmlFiles)) {
-            console.error(htmlFiles + " 地址经过计算已经在wholefile.js所在的根目录之外，防止误修改根目录之外的文件,请修改");
+        if (mypath.isOver(readHtmlPath)) {
+            console.error(readHtmlPath + " 地址经过计算已经在wholefile.js所在的根目录之外，防止误修改根目录之外的文件,请修改");
             process.exit();
         }
-        let global = {};
-        let handleResult = handleHtml(htmlFiles, true, defaultTag);
-        if (handleResult.$dom) {
-            fs.writeFile(mypath.destPath(htmlDest, path.basename(htmlFiles)), handleResult.$dom.html(), function (err) {
-                if (err) {
-                    console.error(err);
-                } else {
-                    console.log("写入成功 done");
-                }
-            });
-        }
+        let handleResult = handleHtml(readHtmlPath, defaultTag, true);
+        writeResult(handleResult, readHtmlPath, htmlDest, defaultTag);
+
     }
+
+    if (Array.isArray(htmlFiles)) {
+        let length = htmlFiles.length;
+        for (let i = 0; i < length; i++) {
+            startHandleHtml(htmlFiles[i]);
+        }
+    } else {
+        startHandleHtml(htmlFiles);
+    }
+
 };
+
+function writeResult(result, htmlPath, htmlDest, defaultTag) {
+    if (result.$dom) {
+        fs.writeFile(mypath.destPath(htmlDest, path.basename(htmlPath)), result.$dom.html(), function (err) {
+            if (err) {
+                console.error(err);
+            } else {
+                console.log("写入成功 done");
+            }
+        });
+    }
+}

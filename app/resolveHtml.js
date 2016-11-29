@@ -10,31 +10,9 @@
  * @returns {{body: *, wholein: *, allTag: {body: null, script: {pathTag: string}, link: {pathTag: string}, style: {}}}}
  */
 let $ = require('cheerio');
-let myPath = require('./mypath');
-let path = require('path');
 let tools = require('./tools');
 
-/**
- * 处理标签中的连接src和href属性
- * @param element
- */
-function handlePathELement(element, file, tag, defaultTag, tagName) {
-    //可能没有src标签比如<script>和<style>
-    //最终地址是dest规定的地址，需要计算
-    if (tag.pathTag) {
-        let pathTag = element.attr(tag.pathTag);
-        if (pathTag) {
-            let absolutePath = myPath.getAbsolutePath(file, pathTag);
-            if(!defaultTag[tagName].paths){
-                defaultTag[tagName].paths = [];
-            }
-            defaultTag[tagName].paths.push(absolutePath);//把标签的地址存储下来，待压缩或者复制文件用
 
-            let attrPath = path.join(tag.dest, path.basename(pathTag));
-            element.attr(tag.pathTag, attrPath);
-        }
-    }
-}
 
 module.exports = function resolveHtml($dom, filePath, defaultTag, isFirst) {
 
@@ -85,7 +63,6 @@ module.exports = function resolveHtml($dom, filePath, defaultTag, isFirst) {
                                 }
                             }
                         } else {//如果type不是whole，就是child专用标签，单独解析
-                            handlePathELement($this, filePath, element, defaultTag, i);
                             if ($this.is("[notmove]")) {
                                 if (element.notmove) {
                                     element.notmove.add($this);

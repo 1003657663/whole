@@ -5,8 +5,35 @@
 
 let path = require('path'),
     fs = require('fs'),
-    _startPath;
-module.exports = {
+    _startPath,
+    myPath;
+
+/**
+ * 创建多级目录
+ * @param thePath
+ */
+function createPath(thePath) {
+    if (myPath.isOver(thePath)) {
+        console.error("创建目录" + thePath + "超出项目目录范围，请检查");
+        process.exit();
+    }
+    let pathtmp;
+    thePath.split(path.sep).forEach(function (dirname) {
+        if (pathtmp) {
+            pathtmp = path.join(pathtmp, dirname);
+        }
+        else {
+            pathtmp = dirname;
+        }
+        if (!fs.existsSync(pathtmp)) {
+            if (!fs.mkdirSync(pathtmp)) {
+                return false;
+            }
+        }
+    });
+    return true;
+}
+module.exports = myPath = {
     //是否pathA<pathB
     isBefore: function (pathA, pathB) {
         if (path.relative(pathA, pathB).indexOf('..\\') == -1) {
@@ -64,16 +91,13 @@ module.exports = {
     },
     destPath: function (destPath, fileName) {
         let _dPath = path.join(this.startPath(), destPath);
-        let stat = fs.statSync(_dPath);
-        if (!stat || !stat.isDirectory()) {
-            try {
-                fs.mkdirSync(_dPath);
+        if (!fs.existsSync(_dPath)) {
+            if (createPath(_dPath)) {
                 return path.join(_dPath, './' + fileName);
-            } catch (e) {
-                console.error(e);
             }
-        } else if (stat && stat.isDirectory()) {
+        } else {
             return path.join(_dPath, './' + fileName);
         }
+        return false;
     }
 };

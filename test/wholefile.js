@@ -8,7 +8,7 @@ whole.task({
 
     html: {
         files: ["index.html"],
-        dest: "./dist"
+        dest: "html"
     },
     tag: {
         script: {

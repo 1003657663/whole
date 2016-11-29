@@ -37,6 +37,48 @@ function isTagRepeat(oneTag, tagName, thisAllTag, pathTag) {
     }
     return false;
 }
+/**
+ * 处理标签中的连接src和href属性
+ * @param thisElement
+ */
+function handlePathELement(oneTag, thisElement, filePath) {
+    //可能没有src标签比如<script>和<style>
+    //最终地址是dest规定的地址，需要计算
+    if (oneTag.pathTag) {
+        let tagPath = thisElement.attr(oneTag.pathTag);
+
+        if (tagPath) {
+            //把文件所在路径存入数组，后续处理文件
+            let absolutePath = myPath.getAbsolutePath(filePath, tagPath);
+            if (!Array.isArray(oneTag.paths)) {
+                oneTag.paths = [];
+            }
+            oneTag.paths.push(absolutePath);
+            //修改attr src中的路径
+            let attrPath = path.join(oneTag.dest, path.basename(tagPath));
+            thisElement.attr(oneTag.pathTag, attrPath);
+        }
+    }
+}
+
+/**
+ * 通过解析最终生成的html节点，获取各个标签的路径，并且更改路径属性
+ * @param resolveData
+ * @param filePath
+ */
+function resolveIndexData(resolveData, filePath) {
+    let $dom = resolveData.$dom;
+    let allTag = resolveData.allTag;
+    $dom("*").filter(function () {
+        let $this = $(this);
+        for (let i in allTag) {
+            let oneTag = allTag[i];
+            if ($this.is(i) && oneTag.pathTag && $this.is("[" + oneTag.pathTag + "]")) {
+                handlePathELement(oneTag, $this, filePath);
+            }
+        }
+    });
+}
 
 /**
  * 处理返回的数据，增删改相应的dom结构,时刻牢记任何一个标签都可能为空，需要判空
@@ -50,7 +92,6 @@ function handleResult(resolveResult, result, thisWholein) {
 
     let thatAllTag = result.allTag;//allTag{script:{notmove:"",other:""},link}
     let thatBody = result.body;
-    let thatHead = result.head;
     let thatDom = result.$dom;
 
     for (let i in thatAllTag) {
@@ -141,12 +182,18 @@ module.exports = function handleHtml(filePath, defaultTag, isFirst) {
         for (let i = 0; i < wholein.length; i++) {
             let path = myPath.getAbsolutePath(filePath, wholein.eq(i).attr("src"));
             let result = handleHtml(path, defaultTag);
-            handleResult(resolveData, result, wholein.eq(i));//先处理返回结果，处理后，在解析当前页面
+            handleResult(resolveData, result, wholein.eq(i), isFirst);//先处理返回结果，处理后，在解析当前页面
+            if (isFirst) {
+                //处理最终解析结果，各个标签的路径处理和，对应的文件压缩和复制
+                resolveIndexData(resolveData, filePath);
+            }
         }
     }
 
     //返回处理结果
     return resolveData;
 };
+
+
 
 
