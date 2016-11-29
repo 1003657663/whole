@@ -5,18 +5,23 @@
 let whole = require('../app/whole.js');
 whole.task({
     dest: "./dist",
-    usertag: "",
+
     html: {
         files: ["index.html"],
         dest: "./dist"
     },
-    css: {
-        cssmin: "cssmin",
-        dest: "./dist/css"
-    },
-    js: {
-        jsmin: "uglify",
-        dest: "./dist/js"
+    tag: {
+        script: {
+            pathTag: "src",
+            dest: "js",
+            min: "uglify"
+        },
+        link: {
+            pathTag: "href",
+            dest: "css",
+            min: "cssmin"
+        },
+        style: {},
     }
 });
 

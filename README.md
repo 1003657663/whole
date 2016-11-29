@@ -104,14 +104,12 @@ whole
     ```
     <script type="whole"></script>
     ```
-    通过加上src路径，标识从子页面中解析的js标签放到特定的位置
-    ```
-    <script type="whole" src="./js/index.js"></script>
-    ```
+    主页面已经有的带有src或者href属性的标签，如果子页面和主页面有同样的标签，
+    并且此属性的路径一样，那么这个标签将不会被移动到主页面
+    
     link标签如上
     ```
     <link type="whole">
-    <link type="whole" href="./css/index.css>
     ```
     如果style，link，script标签都没有type="whole"的位置标记标签，那么默认script位置是body之后，其它标签位置是head标签最底部，
     顺序是按照原来页面中的顺序排列

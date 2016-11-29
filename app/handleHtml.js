@@ -6,124 +6,38 @@
 let $ = require('cheerio'),
     path = require('path'),
     fs = require('fs'),
-    myPath = require('./myPath');
+    myPath = require('./myPath'),
+    resolveHtml = require('./resolveHtml');
+
 
 /**
- * 处理标签中的连接src和href属性
- * @param element
+ * 判断this页面中是否包含子页面中的相同路径的相同的标签
+ * @param oneTag
+ * @param tagName
+ * @param thisAllTag
+ * @param pathTag
+ * @returns {boolean}
  */
-function handlePathELement(element, file, srcTag) {
-    //可能没有src标签比如<script>和<style>
-    if (srcTag) {
-        if (element.attr(srcTag)) {
-            element.path = myPath.getAbsolutePath(file, element.attr(srcTag));
-        }
-    }
-}
-
-/**
- * 解析html中的script，link，style标签和其他自定义标签
- * @param $dom
- * @param filePath
- * @returns {{body: *, wholein: *, allTag: {body: null, script: {pathTag: string}, link: {pathTag: string}, style: {}}}}
- */
-function resolveHtml($dom, filePath, isFirst) {
-
-    let body,
-        wholein,
-        head,
-        defaultEl = {
-            script: {pathTag: "src"},
-            link: {pathTag: "href"},
-            style: {}
-        };
-
-    $dom("*").filter(function () {
-            let $this = $(this);
-            if ($this.is("head")) {
-                head = $this;
-                for (let i in defaultEl) {
-                    if ($this.find(i + "[notmove]").length > 0) {
-                        console.error(filePath + "中的notmove的script或者link标签不可以放在head中，因为head中的标签能被解析到body中并且不移动，请在body中写notmove标签");
-                        process.exit();
-                    }
-                }
-            } else if ($this.is("body")) {
-                body = $this;
-            } else if ($this.is("wholein")) {
-                if ($this.is(":not([src])")) {
-                    console.error("页面:" + filePath + "中包含的wholein标签必须含有src属性，请删除不含src属性的wholein标签");
-                    process.exit();
-                }
-                if (wholein) {
-                    wholein.add($this);
-                } else {
-                    wholein = $this;
-                }
-            } else {
-                for (let i in defaultEl) {
-                    if ($this.is(i)) {
-                        let element = defaultEl[i];
-                        if ($this.is("[type=whole]")) {//如果type是whole那么是index专用标签，单独解析
-                            $this.removeAttr("type");
-                            if (element.pathTag) {//如果有资源tag
-                                if ($this.is("[" + element.pathTag + "]")) {
-                                    if (element.src) {
-                                        element.src.add($this);
-                                    } else {
-                                        element.src = $this;
-                                    }
-                                } else {
-                                    if (element.location) {
-                                        console.error("页面:" + filePath + "中包含多个定位" + i + "标签，规定只能有一个");
-                                        process.exit();
-                                    } else {
-                                        element.location = $this;
-                                    }
-                                }
-                            }
-                        } else {//如果type不是whole，就是child专用标签，单独解析
-                            if ($this.is("[notmove]")) {
-                                if (element.notmove) {
-                                    element.notmove.add($this);
-                                } else {
-                                    element.notmove = $this;
-                                }
-                            } else {
-                                handlePathELement($this, filePath, element.srcTag);
-                                if (!isFirst) {
-                                    $this.remove();
-                                }
-                                if (element.other) {
-                                    element.other.add($this);
-                                } else {
-                                    element.other = $this;
-                                }
-                            }
+function isTagRepeat(oneTag, tagName, thisAllTag, pathTag) {
+    let path = oneTag.attr(pathTag);
+    if (path) {
+        let aimTag = thisAllTag[tagName];
+        if (aimTag) {
+            let other = aimTag.other;
+            if (other) {
+                for (let i = 0; i < other.length; i++) {
+                    if (other.eq(i).is(tagName)) {
+                        if (path == other.eq(i).attr(pathTag)) {
+                            return true;
                         }
                     }
                 }
             }
         }
-    );
-
-    if (!body) {//如果没有body元素，但是有notmove元素，那么错误
-        for (let i in defaultEl) {
-            if (defaultEl[i] && defaultEl[i].notmove && defaultEl[i].notmove.length > 0) {
-                console.error(filePath + "  无body元素的文件中的notmove标签是无效的，请把html代码用body元素包裹");
-                process.exit();
-            }
-        }
     }
-
-    return {
-        head: head,
-        body: body,
-        wholein: wholein,
-        $dom: $dom,
-        allTag: defaultEl
-    };
+    return false;
 }
+
 /**
  * 处理返回的数据，增删改相应的dom结构,时刻牢记任何一个标签都可能为空，需要判空
  * @param $dom
@@ -147,9 +61,15 @@ function handleResult(resolveResult, result, thisWholein) {
                 tag.notmove.removeAttr("notmove");
                 //notmove不做移动
             }
+
+
             if (tag.other && tag.other.length > 0) {
                 for (let h = 0; h < tag.other.length; h++) {
                     let $this = tag.other.eq(h);
+                    //判断页面中是否已经有此标签，有的话不进行继续添加
+                    if (isTagRepeat($this, i, thisAllTag, tag.pathTag)) {
+                        continue;
+                    }
                     if ($this.is("[movetop]")) {
                         //首先净化标签
                         $this.removeAttr("movetop");
@@ -160,11 +80,16 @@ function handleResult(resolveResult, result, thisWholein) {
                         $this.removeAttr("movebottom");
                         //movebottom插入到body下面
                         $this.insertAfter(thisBody);
-                    } else {//判断是否script插入到头部或者尾部
-                        if ($this.is("script")) {
-                            $this.insertAfter(thisBody);
+                    } else {
+                        if (tag.location) {//判断是否有定位标签
+                            tag.location.insertAfter($this);
                         } else {
-                            thisHead.append($this);
+                            //判断是否script插入到头部或者尾部
+                            if ($this.is("script")) {
+                                $this.insertAfter(thisBody);
+                            } else {
+                                thisHead.append($this);
+                            }
                         }
                     }
                 }
@@ -179,12 +104,13 @@ function handleResult(resolveResult, result, thisWholein) {
     }
 }
 
+
 /**
  * module,入口
  * @param filePath
  * @returns {{data: string, allTag: {script: {notmove: {thedata: string, path: string}, movetop: string, movebottom: string, other: string, srcTag: string}, link: {srcTag: string}, style: {}, user: {}}}}
  */
-module.exports = function handleHtml(filePath, isFirst) {
+module.exports = function handleHtml(filePath, defaultTag, isFirst) {
     console.log("正在解析：" + filePath);
     //参数是文件路径，必须是单个文件
     if (myPath.isOver(filePath)) {//判断路径是否超界，合法性
@@ -202,7 +128,7 @@ module.exports = function handleHtml(filePath, isFirst) {
 
     //读取文件的wholein属性，并且递归给下一个
     let $dom = $.load(fileData, {decodeEntities: false});
-    let resolveData = resolveHtml($dom, filePath, isFirst);
+    let resolveData = resolveHtml($dom, filePath, defaultTag, isFirst);//解析当前页面
     let wholein = resolveData.wholein;
 
     if (wholein && wholein.filter(":not([src])").length > 0) {
@@ -214,7 +140,7 @@ module.exports = function handleHtml(filePath, isFirst) {
     if (wholein) {
         for (let i = 0; i < wholein.length; i++) {
             let path = myPath.getAbsolutePath(filePath, wholein.eq(i).attr("src"));
-            let result = handleHtml(path);
+            let result = handleHtml(path, defaultTag);
             handleResult(resolveData, result, wholein.eq(i));//先处理返回结果，处理后，在解析当前页面
         }
     }

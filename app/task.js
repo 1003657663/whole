@@ -4,32 +4,40 @@
  * 解释配置文件
  */
 let readHtml = require('./readhtml');
+let path = require('path');
 
 module.exports = function (config) {
 
-    let allDest = config.dest;
+    let allDest = config.dest || "";
 
     let htmlFiles = config.html.files;
-    let cssmin = config.css.cssmin;
-    let jsmin = config.js.jsmin;
 
     let htmlDest = config.html.dest || allDest;
-    let cssDest = config.css.dest || allDest;
-    let jsDest = config.js.dest || allDest;
 
-    if((htmlFiles && !htmlDest)){
+    let tag = config.tag;
+
+    if ((htmlFiles && !htmlDest)) {
         console.error("html文件路径或者 htmlDest有误");
         process.exit();
     }
-    if((cssmin && !cssDest)){
-        console.error("html文件路径或者 htmlDest有误");
-        process.exit();
+
+
+    for (let i in tag) {
+        if (tag[i]) {
+            let oneTag = tag[i];
+            if (oneTag.pathTag) {
+                if (!(oneTag.dest || allDest)) {
+                    console.error(i + "没有路径信息，请添加");
+                    process.exit();
+                } else {
+                    oneTag.dest = path.join(allDest, oneTag.dest);
+                }
+            }
+        }
     }
-    if((jsmin && !jsDest)){
-        console.error("html文件路径或者 htmlDest有误");
-        process.exit();
-    }
+
+
     if (htmlFiles && htmlDest) {
-        readHtml(htmlFiles,htmlDest);
+        readHtml(htmlFiles, htmlDest, tag);
     }
 };

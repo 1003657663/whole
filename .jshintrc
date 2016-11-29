@@ -2,7 +2,7 @@
   "bitwise":true,//禁止位运算符
   "curly":true,//循环语句必须使用花括号
   "esversion":6,//使用ES6
-  "forin":true,//forin循环检查
+  "forin":false,//forin循环检查
   "funcscope":true,//禁止外部访问内部声明的变量
   "latedef":true,//禁止定义之前使用的变量
   "noarg":true,//禁止arguments.callee,caller

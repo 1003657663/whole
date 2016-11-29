@@ -9,7 +9,7 @@ let handleHtml = require('./handleHtml'),
     path = require('path'),
     fs = require('fs');
 
-module.exports = function (htmlFiles, htmlDest) {
+module.exports = function (htmlFiles, htmlDest, defaultTag) {
 
     if (Array.isArray(htmlFiles)) {
         let length = htmlFiles.length;
@@ -22,7 +22,7 @@ module.exports = function (htmlFiles, htmlDest) {
                 process.exit();
             }
             let global = {};
-            let handleResult = handleHtml(filePath, global);
+            let handleResult = handleHtml(filePath, defaultTag, true);
             if (handleResult.$dom) {
                 fs.writeFile(mypath.destPath(htmlDest, path.basename(filePath)), handleResult.$dom.html(), function (err) {
                     if (err) {
@@ -42,7 +42,7 @@ module.exports = function (htmlFiles, htmlDest) {
             process.exit();
         }
         let global = {};
-        let handleResult = handleHtml(htmlFiles, global);
+        let handleResult = handleHtml(htmlFiles, true, defaultTag);
         if (handleResult.$dom) {
             fs.writeFile(mypath.destPath(htmlDest, path.basename(htmlFiles)), handleResult.$dom.html(), function (err) {
                 if (err) {
