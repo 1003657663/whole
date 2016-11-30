@@ -41,7 +41,7 @@ function isTagRepeat(oneTag, tagName, thisAllTag, pathTag) {
  * 处理标签中的连接src和href属性
  * @param thisElement
  */
-function handlePathELement(oneTag, thisElement, filePath) {
+function handlePathELement(oneTag, thisElement, filePath, writeHtmlPath) {
     //可能没有src标签比如<script>和<style>
     //最终地址是dest规定的地址，需要计算
     if (oneTag.pathTag) {
@@ -55,7 +55,7 @@ function handlePathELement(oneTag, thisElement, filePath) {
             }
             oneTag.paths.push(absolutePath);
             //修改attr src中的路径
-            let attrPath = path.join(oneTag.dest, path.basename(tagPath));
+            let attrPath = path.join(path.relative(writeHtmlPath, oneTag.dest), path.basename(tagPath));
             thisElement.attr(oneTag.pathTag, attrPath);
         }
     }
@@ -66,7 +66,7 @@ function handlePathELement(oneTag, thisElement, filePath) {
  * @param resolveData
  * @param filePath
  */
-function resolveIndexData(resolveData, filePath) {
+function resolveIndexData(resolveData, filePath, writeHtmlPath) {
     let $dom = resolveData.$dom;
     let allTag = resolveData.allTag;
     $dom("*").filter(function () {
@@ -74,7 +74,7 @@ function resolveIndexData(resolveData, filePath) {
         for (let i in allTag) {
             let oneTag = allTag[i];
             if ($this.is(i) && oneTag.pathTag && $this.is("[" + oneTag.pathTag + "]")) {
-                handlePathELement(oneTag, $this, filePath);
+                handlePathELement(oneTag, $this, filePath, writeHtmlPath);
             }
         }
     });
@@ -149,9 +149,12 @@ function handleResult(resolveResult, result, thisWholein) {
 /**
  * module,入口
  * @param filePath
+ * @param writeHtmlPath
+ * @param defaultTag
+ * @param isFirst
  * @returns {{data: string, allTag: {script: {notmove: {thedata: string, path: string}, movetop: string, movebottom: string, other: string, srcTag: string}, link: {srcTag: string}, style: {}, user: {}}}}
  */
-module.exports = function handleHtml(filePath, defaultTag, isFirst) {
+module.exports = function handleHtml(filePath, writeHtmlPath, defaultTag, isFirst) {
     console.log("正在解析：" + filePath);
     //参数是文件路径，必须是单个文件
     if (myPath.isOver(filePath)) {//判断路径是否超界，合法性
@@ -181,11 +184,11 @@ module.exports = function handleHtml(filePath, defaultTag, isFirst) {
     if (wholein) {
         for (let i = 0; i < wholein.length; i++) {
             let path = myPath.getAbsolutePath(filePath, wholein.eq(i).attr("src"));
-            let result = handleHtml(path, defaultTag);
+            let result = handleHtml(path, writeHtmlPath, defaultTag);
             handleResult(resolveData, result, wholein.eq(i), isFirst);//先处理返回结果，处理后，在解析当前页面
             if (isFirst) {
                 //处理最终解析结果，各个标签的路径处理和，对应的文件压缩和复制
-                resolveIndexData(resolveData, filePath);
+                resolveIndexData(resolveData, filePath, writeHtmlPath);
             }
         }
     }

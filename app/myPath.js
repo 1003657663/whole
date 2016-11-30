@@ -92,12 +92,15 @@ module.exports = myPath = {
     destPath: function (destPath, fileName) {
         let _dPath = path.join(this.startPath(), destPath);
         if (!fs.existsSync(_dPath)) {
-            if (createPath(_dPath)) {
-                return path.join(_dPath, './' + fileName);
+            if (!createPath(_dPath)) {
+                return false;
             }
-        } else {
-            return path.join(_dPath, './' + fileName);
         }
-        return false;
+        if (fileName) {
+            return path.join(_dPath, './' + fileName);
+        } else {
+            return _dPath;
+        }
+
     }
 };

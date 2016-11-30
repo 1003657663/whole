@@ -7,7 +7,8 @@
 let handleHtml = require('./handleHtml'),
     mypath = require('./myPath'),
     path = require('path'),
-    fs = require('fs');
+    fs = require('fs'),
+    writeResult = require('./writeResult');
 
 module.exports = function (htmlFiles, htmlDest, defaultTag) {
 
@@ -19,8 +20,9 @@ module.exports = function (htmlFiles, htmlDest, defaultTag) {
             console.error(readHtmlPath + " 地址经过计算已经在wholefile.js所在的根目录之外，防止误修改根目录之外的文件,请修改");
             process.exit();
         }
-        let handleResult = handleHtml(readHtmlPath, defaultTag, true);
-        writeResult(handleResult, readHtmlPath, htmlDest, defaultTag);
+        let handleResult = handleHtml(readHtmlPath, htmlDest, defaultTag, true);
+        let writeHtmlPath = mypath.destPath(htmlDest, path.basename(readHtmlPath));
+        writeResult(handleResult, writeHtmlPath, defaultTag);
 
     }
 
@@ -35,14 +37,3 @@ module.exports = function (htmlFiles, htmlDest, defaultTag) {
 
 };
 
-function writeResult(result, htmlPath, htmlDest, defaultTag) {
-    if (result.$dom) {
-        fs.writeFile(mypath.destPath(htmlDest, path.basename(htmlPath)), result.$dom.html(), function (err) {
-            if (err) {
-                console.error(err);
-            } else {
-                console.log("写入成功 done");
-            }
-        });
-    }
-}
