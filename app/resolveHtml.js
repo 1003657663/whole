@@ -9,7 +9,7 @@
  * @param filePath
  * @returns {{body: *, wholein: *, allTag: {body: null, script: {pathTag: string}, link: {pathTag: string}, style: {}}}}
  */
-let $ = require('cheerio');
+let $ = require('./lib/cheerio/index');
 let tools = require('./tools');
 let myPath = require('./myPath');
 

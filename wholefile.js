@@ -6,7 +6,7 @@ module.exports = {
     dest: "./dist",
 
     html: {
-        files: ["index.html"],
+        files: ["./test/index.html"],
         dest: "html"
     },
     tag: {

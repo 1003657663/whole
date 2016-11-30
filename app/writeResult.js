@@ -34,6 +34,11 @@ function removeRepeat(arr) {
     }
 }
 
+/**
+ * 写入结果
+ * @param result
+ * @param writeHtmlPath
+ */
 module.exports = function writeResult(result, writeHtmlPath) {
     let resultTag = result.allTag;
     if (result.$dom) {

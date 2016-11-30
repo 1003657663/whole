@@ -3,7 +3,7 @@
 /**
  * Created by w1003 on 2016/11/23.
  */
-let $ = require('cheerio'),
+let $ = require('./lib/cheerio/index'),
     path = require('path'),
     fs = require('fs'),
     myPath = require('./myPath'),

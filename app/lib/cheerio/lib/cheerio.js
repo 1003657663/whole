@@ -5,7 +5,7 @@
 var parse = require('./parse'),
     isHtml = require('./utils').isHtml,
     _ = {
-      extend: require('lodash/assignIn'),
+      extend: require('lodash/assignin'),
       bind: require('lodash/bind'),
       forEach: require('lodash/forEach'),
       defaults: require('lodash/defaults')

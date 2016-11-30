@@ -10,6 +10,12 @@ let handleHtml = require('./handleHtml'),
     fs = require('fs'),
     writeResult = require('./writeResult');
 
+/**
+ * 负责html文件路径周转到下一级，接受处理的数据并且转到文件处理部分
+ * @param htmlFiles
+ * @param htmlDest
+ * @param defaultTag
+ */
 module.exports = function (htmlFiles, htmlDest, defaultTag) {
 
     function startHandleHtml(oneHtmlFile) {
@@ -22,8 +28,7 @@ module.exports = function (htmlFiles, htmlDest, defaultTag) {
         }
         let handleResult = handleHtml(readHtmlPath, htmlDest, defaultTag, true);
         let writeHtmlPath = mypath.destPath(htmlDest, path.basename(readHtmlPath));
-        writeResult(handleResult, writeHtmlPath, defaultTag);
-
+        writeResult(handleResult, writeHtmlPath, defaultTag);//文件写入和压缩处理
     }
 
     if (Array.isArray(htmlFiles)) {

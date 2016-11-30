@@ -5,7 +5,11 @@
 
 let fs = require('fs'),
     path = require('path');
-
+/**
+ * 文件拷贝
+ * @param fromPath
+ * @param toPath
+ */
 module.exports = function copyFile(fromPath, toPath) {
     fs.stat(toPath, function (err, st) {
         if (err) {

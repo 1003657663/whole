@@ -1,10 +1,13 @@
 {
   "name": "whole",
-  "version": "1.0.0",
+  "version": "0.5.2",
   "description": "自动合并分开的html文件，包括其中的style和js标签，是一个html模块化工具",
-  "main": "wholefile.js",
+  "main": "whole.js",
+  "bin":{
+    "whole":"./whole.js"
+  },
   "scripts": {
-    "test": "node ../test/wholefile.js"
+    "test": "node whole"
   },
   "keywords": [
     "whole"
