@@ -20,7 +20,7 @@ module.exports = function copyFile(fromPath, toPath) {
                 }
                 if (stat.isFile()) {
                     let readable = fs.createReadStream(fromPath);
-                    let writeable = fs.createWriteStream(path.join(toPath + './' + path.basename(fromPath)));
+                    let writeable = fs.createWriteStream(path.join(toPath ,path.basename(fromPath)));
                     readable.pipe(writeable);
                 }
             });

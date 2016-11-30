@@ -26,9 +26,9 @@ function removeRepeat(arr) {
         } else {
             if (sameStart) {
                 arr.splice(sameStart, i - sameStart);
+                i -= (i - sameStart);
+                sameStart = null;
             }
-            sameStart = null;
-            i -= (i - sameStart);
             one = arr[i];
         }
     }
@@ -54,8 +54,8 @@ module.exports = function writeResult(result, writeHtmlPath) {
             if (tag.dest) {
                 let destDir = myPath.destPath(tag.dest);
                 if (!tag.min) {
-                    for (let p = 0; p < paths.length; i++) {
-                        copyFile(destDir, paths[p]);
+                    for (let p = 0; p < paths.length; p++) {
+                        copyFile(paths[p],destDir);
                     }
                 }
             }

@@ -49,11 +49,15 @@ function handlePathELement(oneTag, thisElement, filePath, writeHtmlPath) {
 
         if (tagPath) {
             //把文件所在路径存入数组，后续处理文件
-            let absolutePath = myPath.getAbsolutePath(filePath, tagPath);
+            //判断是否存在
+            if (!fs.existsSync(tagPath)) {
+                console.error(filePath + "中的标签中的路径" + tagPath + "不存在，请更改");
+                process.exit();
+            }
             if (!Array.isArray(oneTag.paths)) {
                 oneTag.paths = [];
             }
-            oneTag.paths.push(absolutePath);
+            oneTag.paths.push(tagPath);
             //修改attr src中的路径
             let attrPath = path.join(path.relative(writeHtmlPath, oneTag.dest), path.basename(tagPath));
             thisElement.attr(oneTag.pathTag, attrPath);
@@ -133,6 +137,11 @@ function handleResult(resolveResult, result, thisWholein) {
                             }
                         }
                     }
+                    if (h == tag.other.length - 1) {//在最后一次执行中，去掉whole定位标签
+                        if (tag.location) {
+                            tag.location.remove();
+                        }
+                    }
                 }
             }
         }
@@ -186,10 +195,10 @@ module.exports = function handleHtml(filePath, writeHtmlPath, defaultTag, isFirs
             let path = myPath.getAbsolutePath(filePath, wholein.eq(i).attr("src"));
             let result = handleHtml(path, writeHtmlPath, defaultTag);
             handleResult(resolveData, result, wholein.eq(i), isFirst);//先处理返回结果，处理后，在解析当前页面
-            if (isFirst) {
-                //处理最终解析结果，各个标签的路径处理和，对应的文件压缩和复制
-                resolveIndexData(resolveData, filePath, writeHtmlPath);
-            }
+        }
+        if (isFirst) {
+            //处理最终解析结果，各个标签的路径处理和，对应的文件压缩和复制
+            resolveIndexData(resolveData, filePath, writeHtmlPath);
         }
     }
 

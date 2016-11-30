@@ -14,12 +14,10 @@ whole.task({
         script: {
             pathTag: "src",
             dest: "js",
-            min: "uglify"
         },
         link: {
             pathTag: "href",
             dest: "css",
-            min: "cssmin"
         },
         style: {},
     }
