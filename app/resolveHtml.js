@@ -65,7 +65,7 @@ module.exports = function resolveHtml($dom, filePath, defaultTag, isFirst) {
                         } else {//如果type不是whole，就是child专用标签，单独解析
                             let attr;
                             if (element.pathTag && (attr = $this.attr(element.pathTag))) {
-                                $this.attr(element.pathTag, myPath.getAbsolutePath(filePath, attr));
+                                $this.attr(element.pathTag, myPath.getJoinPath(filePath, attr));
                             }
                             if ($this.is("[notmove]")) {
                                 if (element.notmove) {

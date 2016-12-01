@@ -5,11 +5,21 @@
  */
 let readHtml = require('./readhtml');
 let path = require('path');
+let myPath = require('./myPath');
 
 module.exports = function (config) {
 
     let allDest = config.dest || "";
 
+    //处理html数组的路径
+    /*    let files = config.html.files;
+     if(Array.isArray(files)){
+     for(let i=0;i<files.length;i++){
+     files[i] = myPath.getAbsolutePath(files[i]);
+     }
+     }else{
+     config.html.files = myPath.getAbsolutePath(files);
+     }*/
     let htmlFiles = config.html.files;
 
     let htmlDest = path.join(allDest, config.html.dest);
@@ -38,6 +48,6 @@ module.exports = function (config) {
 
 
     if (htmlFiles && htmlDest) {
-        readHtml(htmlFiles, htmlDest, tag);
+        readHtml(htmlFiles, htmlDest, tag, config);
     }
 };

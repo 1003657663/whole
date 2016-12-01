@@ -60,12 +60,12 @@ module.exports = myPath = {
         return this.isAfter(dir, filePath);//判断路径合法性
     },
     /**
-     * 通过当前路径filt和相对路径src获得解析后的绝对路径
+     * 通过当前路径file和相对路径src获得解析后的绝对路径
      * @param file
      * @param src
      * @returns {string|*}
      */
-    getAbsolutePath: function (file, src, isDir) {
+    getJoinPath: function (file, src, isDir) {
         let isDirPath = false;
         if (isDir) {
             isDirPath = isDir;
@@ -83,11 +83,39 @@ module.exports = myPath = {
             return path.join(file, src);
         }
     },
-    startPath: function () {
-        if (!_startPath) {
-            _startPath = process.argv[1];
+    getAbsolutePath(thePath) {//获得相对执行目录的绝对路径
+        if (thePath.indexOf(":") != -1) {
+            return thePath;
         }
-        return path.dirname(_startPath);
+        return path.join(this.startPath(), thePath);
+    },
+    startPath: function () {
+        let isFile;
+        if (!_startPath) {
+            if (process.argv[2]) {
+                _startPath = path.join(process.cwd(), process.argv[2]);
+            } else {
+                _startPath = process.cwd();
+            }
+            let stat;
+            try {
+                stat = fs.statSync(_startPath);
+                if (stat.isDirectory()) {
+                    isFile = false;
+                } else if (stat.isFile()) {
+                    isFile = true;
+                }
+            } catch (e) {
+                console.error("执行参数合并为路径不存在:" + _startPath());
+                console.error(e);
+                process.exit();
+            }
+        }
+        if (isFile) {
+            return path.dirname(_startPath);
+        } else {
+            return _startPath;
+        }
     },
     destPath: function (destPath, fileName) {
         let _dPath = path.join(this.startPath(), destPath);
@@ -97,7 +125,7 @@ module.exports = myPath = {
             }
         }
         if (fileName) {
-            return path.join(_dPath, './' + fileName);
+            return path.join(_dPath, fileName);
         } else {
             return _dPath;
         }

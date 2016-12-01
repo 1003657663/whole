@@ -1,10 +1,10 @@
 {
   "name": "whole",
-  "version": "0.5.2",
+  "version": "0.5.4",
   "description": "自动合并分开的html文件，包括其中的style和js标签，是一个html模块化工具",
   "main": "whole.js",
-  "bin":{
-    "whole":"./whole.js"
+  "bin": {
+    "whole": "./whole.js"
   },
   "scripts": {
     "test": "node whole"
@@ -15,5 +15,11 @@
   "author": "宋超",
   "license": "ISC",
   "devDependencies": {},
-  "dependencies": {}
+  "dependencies": {
+    "css-select": "~1.2.0",
+    "dom-serializer": "~0.1.0",
+    "entities": "~1.1.1",
+    "htmlparser2": "^3.9.1",
+    "lodash": "^4.15.0"
+  }
 }

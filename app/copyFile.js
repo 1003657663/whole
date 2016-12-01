@@ -5,12 +5,9 @@
 
 let fs = require('fs'),
     path = require('path');
-/**
- * 文件拷贝
- * @param fromPath
- * @param toPath
- */
-module.exports = function copyFile(fromPath, toPath) {
+
+
+function copyOneFile(fromPath, toPath, successCallBack,p) {
     fs.stat(toPath, function (err, st) {
         if (err) {
             console.error("读取文件路径" + toPath + "失败，请检查");
@@ -24,10 +21,32 @@ module.exports = function copyFile(fromPath, toPath) {
                 }
                 if (stat.isFile()) {
                     let readable = fs.createReadStream(fromPath);
-                    let writeable = fs.createWriteStream(path.join(toPath ,path.basename(fromPath)));
+                    let writeable = fs.createWriteStream(path.join(toPath, path.basename(fromPath)));
+                    writeable.on('finish', function () {
+                        successCallBack(p);
+                    });
                     readable.pipe(writeable);
                 }
             });
         }
     });
+}
+
+/**
+ * 文件拷贝
+ * @param fromPath
+ * @param toPath
+ * @param paths
+ */
+module.exports = function copyFile(paths, toPath, successCallback) {
+
+    for (let p = 0; p < paths.length; p++) {
+        copyOneFile(paths[p], toPath, function (p) {
+            console.log("写入成功  " + paths[p]);
+            if (p == paths.length - 1) {
+                successCallback();
+            }
+        },p);
+    }
 };
+

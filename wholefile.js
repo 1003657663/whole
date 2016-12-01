@@ -4,7 +4,7 @@
  */
 module.exports = {
     dest: "./dist",
-
+    printList: true,
     html: {
         files: ["./test/index.html"],
         dest: "html"

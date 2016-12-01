@@ -192,7 +192,7 @@ module.exports = function handleHtml(filePath, writeHtmlPath, defaultTag, isFirs
     //**************************************************接下来处理返回的数据，并返回
     if (wholein) {
         for (let i = 0; i < wholein.length; i++) {
-            let path = myPath.getAbsolutePath(filePath, wholein.eq(i).attr("src"));
+            let path = myPath.getJoinPath(filePath, wholein.eq(i).attr("src"));
             let result = handleHtml(path, writeHtmlPath, defaultTag);
             handleResult(resolveData, result, wholein.eq(i), isFirst);//先处理返回结果，处理后，在解析当前页面
         }

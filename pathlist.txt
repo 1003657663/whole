@@ -1,0 +1,7 @@
+script
+E:\www\工具项目\whole\test\js\bootstrap.js
+E:\www\工具项目\whole\test\js\static.js
+
+link
+E:\www\工具项目\whole\test\css\bootstrap.css
+
