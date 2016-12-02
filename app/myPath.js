@@ -51,6 +51,18 @@ module.exports = myPath = {
             return true;
         }
     },
+    join:function () {
+        let strs = [].slice.apply(arguments);
+        strs.filter(function (str) {
+            if(typeof str == "string"){
+                return true;
+            }
+        });
+        if(strs.length === 0){
+            return false;
+        }
+        return path.join.apply(path,strs);
+    },
     //判断路径是否超界
     isOver: function (filePath) {
         if (!_startPath) {

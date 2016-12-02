@@ -22,7 +22,7 @@ module.exports = function (config) {
      }*/
     let htmlFiles = config.html.files;
 
-    let htmlDest = path.join(allDest, config.html.dest);
+    let htmlDest = myPath.join(allDest, config.html.dest);
 
     let tag = config.tag;
 
