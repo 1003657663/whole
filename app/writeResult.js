@@ -5,7 +5,6 @@
 
 let fs = require('fs'),
     myPath = require('./myPath'),
-    path = require('path'),
     copyFile = require('./copyFile');
 
 
@@ -45,7 +44,7 @@ function removeRepeat(arr) {
  */
 function printList(tag, paths) {
     let data = tag + "\n" + paths.join('\n') + "\n\n";
-    fs.writeFile(path.join(myPath.startPath(), 'pathlist.txt'), data, {flag: 'a'}, function (err) {
+    fs.writeFile(myPath.join(myPath.startPath(), 'pathlist.txt'), data, {flag: 'a'}, function (err) {
         if (err) {
             console.error(err);
             return;
@@ -60,7 +59,7 @@ function printList(tag, paths) {
  */
 function clearOrCreateListFile() {
     try {
-        fs.writeFileSync(path.join(myPath.startPath(), 'pathlist.txt'), "");
+        fs.writeFileSync(myPath.join(myPath.startPath(), 'pathlist.txt'), "");
     } catch (e) {
         console.error(e);
     }

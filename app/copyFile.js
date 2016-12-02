@@ -4,6 +4,7 @@
  */
 
 let fs = require('fs'),
+    myPath = require('./myPath'),
     path = require('path');
 
 
@@ -21,7 +22,7 @@ function copyOneFile(fromPath, toPath, successCallBack,p) {
                 }
                 if (stat.isFile()) {
                     let readable = fs.createReadStream(fromPath);
-                    let writeable = fs.createWriteStream(path.join(toPath, path.basename(fromPath)));
+                    let writeable = fs.createWriteStream(myPath.join(toPath, path.basename(fromPath)));
                     writeable.on('finish', function () {
                         successCallBack(p);
                     });

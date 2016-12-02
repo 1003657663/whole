@@ -4,7 +4,6 @@
  * 解释配置文件
  */
 let readHtml = require('./readhtml');
-let path = require('path');
 let myPath = require('./myPath');
 
 module.exports = function (config) {
@@ -22,7 +21,7 @@ module.exports = function (config) {
      }*/
     let htmlFiles = config.html.files;
 
-    let htmlDest = path.join(allDest, config.html.dest);
+    let htmlDest = myPath.join(allDest, config.html.dest);
 
     let tag = config.tag;
 
@@ -40,7 +39,7 @@ module.exports = function (config) {
                     console.error(i + "没有路径信息，请添加");
                     process.exit();
                 } else {
-                    oneTag.dest = path.join(allDest, oneTag.dest);
+                    oneTag.dest = myPath.join(allDest, oneTag.dest);
                 }
             }
         }

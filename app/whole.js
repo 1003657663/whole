@@ -4,16 +4,16 @@
  */
 
 let task = require('./task.js');
-let path = require('path');
 let fs = require('fs');
+let myPath = require('./myPath');
 
 //判断是否存在配置文件参数，比如whole a.js,不存在采用默认wholefile.js
 let file = process.argv[2];
 let configFile;
-if (file && fs.existsSync(path.join(process.cwd(), file))) {
-    configFile = path.join(process.cwd(), file);
+if (file && fs.existsSync(myPath.join(process.cwd(), file))) {
+    configFile = myPath.join(process.cwd(), file);
 } else {
-    configFile = path.join(process.cwd(), "wholefile.js");
+    configFile = myPath.join(process.cwd(), "wholefile.js");
 }
 
 let config;

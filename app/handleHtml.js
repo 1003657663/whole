@@ -59,7 +59,7 @@ function handlePathELement(oneTag, thisElement, filePath, writeHtmlPath) {
             }
             oneTag.paths.push(tagPath);
             //修改attr src中的路径
-            let attrPath = path.join(path.relative(writeHtmlPath, oneTag.dest), path.basename(tagPath));
+            let attrPath = myPath.join(path.relative(writeHtmlPath, oneTag.dest), path.basename(tagPath));
             thisElement.attr(oneTag.pathTag, attrPath);
         }
     }
